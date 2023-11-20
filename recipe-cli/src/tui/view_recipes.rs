@@ -1,4 +1,4 @@
-use cursive::views::{Dialog, TextView, ListView, EditView, Menubar};
+use cursive::views::{Dialog, TextView, ListView, EditView, Menubar, BoxedView, LinearLayout};
 use cursive::Cursive;
 use cursive::menu;
 #[path="../query/get_recipes.rs"] mod get_recipes;
@@ -18,12 +18,16 @@ fn generate_recipe_list() ->  Menubar{
     }
 
     for i in results{
-        view.add_subtree(
-            &i.name,
-            cursive::menu::Tree::new()
-            .leaf(&i.name, move |s| {
-                display_recipe_information::display_info(s, &i.name, &i.description)
-            })
+        view.add_leaf(
+            &i.name.clone(),
+            move |s| {
+                s.add_layer(
+                   LinearLayout::vertical()
+                   .child(Dialog::around(TextView::new(&i.name.clone())))
+                   .child(Dialog::around(TextView::new(&i.description.clone())).title("Description"))
+                   .child(Dialog::around(TextView::new(&i.instructions.clone())).title("instructions").dismiss_button("Back"))
+                )
+            }
         );
     }
 
@@ -42,6 +46,3 @@ pub fn view_recipes(s: &mut Cursive){
         )
     );
 }
-
-
-
