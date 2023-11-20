@@ -2,7 +2,6 @@ use cursive::views::{Dialog, TextView, ListView, EditView, Menubar, BoxedView, L
 use cursive::Cursive;
 use cursive::menu;
 #[path="../query/get_recipes.rs"] mod get_recipes;
-#[path="../tui/display_recipe_information.rs"] mod display_recipe_information;
 
 fn generate_recipe_list() ->  Menubar{
     let results = get_recipes::main();
