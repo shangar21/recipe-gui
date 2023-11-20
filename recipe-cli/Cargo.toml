@@ -8,5 +8,5 @@ edition = "2021"
 [dependencies]
 diesel = { version = "2.1.4", features = ["sqlite", "numeric"] }
 diesel_cli = { version = "2.1.1", features = ["sqlite"] }
-cursive = { git = "https://github.com/gyscos/cursive" }
+cursive = { git = "https://github.com/gyscos/cursive", features = ["builder"] }
 dotenv = { version = "0.15.0", default-features = false }
