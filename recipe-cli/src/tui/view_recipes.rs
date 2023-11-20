@@ -38,6 +38,7 @@ pub fn view_recipes(s: &mut Cursive){
         Dialog::around(
             TextView::new("View Recipes")
         )
+        .title("View Recipes")
         .button("Quit", |s| s.quit())
         .dismiss_button("Back")
         .content(
