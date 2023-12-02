@@ -1,8 +1,10 @@
-use cursive::views::{Dialog, TextView, ListView, EditView, Menubar, BoxedView, LinearLayout, TextArea};
-use cursive::view::{Resizable, Nameable};
+use cursive::views::{Dialog, TextView, ListView, EditView, Menubar, BoxedView, LinearLayout, TextArea, ListChild, ResizedView, NamedView};
+use cursive::view::{Resizable, Nameable, Scrollable};
 use cursive::Cursive;
 use cursive::menu;
-#[path="../query/get_recipes.rs"] mod get_recipes;
+#[path="../query/add_recipes.rs"] mod add_recipes;
+#[path="../query/get_recipe_max_id.rs"] mod get_recipe_id;
+#[path="../models.rs"] mod models;
 
 fn generate_recipe_form() -> ListView {
     let mut view = ListView::new();
@@ -31,7 +33,10 @@ fn generate_recipe_form() -> ListView {
     return view;
 }
 
-fn submit_form(name: &str, desc: &str, instr: &str){}
+fn submit_form(name: &str, desc: &str, instr: &str){
+    let recipe = models::Recipe();
+    recipe.id = get_recipe_id::main() + 1;
+}
 
 pub fn add_recipe(s: &mut Cursive){
     let form = generate_recipe_form();
@@ -41,8 +46,13 @@ pub fn add_recipe(s: &mut Cursive){
         )
         .title("Add Recipe")
         .button("Quit", |s| s.quit())
-        .button("Submit", |s| {
+        .button("Submit", move |s| {
             s.pop_layer();
+            submit_form(
+                s.find_name::<TextArea>("recipe_name").unwrap().get_content(),
+                s.find_name::<TextArea>("recipe_description").unwrap().get_content(),
+                s.find_name::<TextArea>("recipe_instructions").unwrap().get_content()
+            )
         })
         .dismiss_button("Back")
         .content(

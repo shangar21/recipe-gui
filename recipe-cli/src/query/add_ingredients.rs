@@ -4,10 +4,11 @@
 use models::*;
 use diesel::prelude::*;
 
-pub fn main() -> i32{
+pub fn main(ingredient: models::Ingredient) {
     let connection = &mut lib::establish_connection();
-    let results = schema::recipe::table
-        .load(connection)
-        .expect("Error loading recipes");
+    let results = diesel::insert_into(schema::ingredient)
+        .values(ingredient)
+        .execute(connection)
+        .expect("Error adding recipes");
     return results
 }
