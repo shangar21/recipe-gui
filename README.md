@@ -15,6 +15,8 @@ Recipe-CLI is a Qt-based desktop application that allows users to create, manage
 
 - **Qt**: Ensure that you have Qt installed on your system. You can download and install Qt from the [official Qt website](https://www.qt.io/download).
 - **CMake**: Ensure CMake is installed on your system. You can download it from [CMake's official website](https://cmake.org/download/).
+- **sqlite3**: Ensure sqlite3 is installed on system.
+- **range-v3**: Can be built from source from [range-v3 repo](https://github.com/ericniebler/range-v3)
 
 ### Steps
 
