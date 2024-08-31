@@ -1,6 +1,7 @@
 #ifndef ADDRECIPEWINDOW_H
 #define ADDRECIPEWINDOW_H
 
+#include "SQLiteHelper.h"
 #include <QComboBox>
 #include <QFormLayout>
 #include <QLineEdit>
@@ -28,9 +29,13 @@ private:
   QListWidget *ingredientsListWidget;
   QPushButton *saveButton;
 
+  Recipe recipeInput;
+  std::vector<std::tuple<Ingredient, float, Unit>> ingredientsList;
+
   void setupUI();
   void populateIngredientComboBox();
   void populateUnitComboBox();
+  void addIngredient();
   void saveRecipe();
 };
 

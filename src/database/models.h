@@ -2,6 +2,7 @@
 #define MODELS_H
 
 #include <QString>
+#include <QMetaType>
 
 struct Recipe {
   int id;
@@ -9,6 +10,7 @@ struct Recipe {
   QString description;
   QString instructions;
 };
+Q_DECLARE_METATYPE(Recipe)
 
 struct Ingredient {
   int id;

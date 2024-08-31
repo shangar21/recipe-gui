@@ -1,8 +1,6 @@
 #include "viewrecipewindow.h"
-#include "SQLiteHelper.h"
 #include <QFormLayout>
 #include <QPushButton>
-#include <QVBoxLayout>
 #include <QWidget>
 
 ViewRecipeWindow::ViewRecipeWindow(QWidget *parent) : QWidget(nullptr) {
@@ -21,18 +19,27 @@ void ViewRecipeWindow::setupUI() {
 
   std::vector<Recipe> recipes = SQLiteHelper().fetchRecipes();
 
-  if (recipes.size() == 0) {
-    addRecipeTitle(QString::fromStdString("No recipes Currently!"));
-  }
-
   for (Recipe r : recipes) {
-    addRecipeTitle(r.title);
+    addRecipeTitle(r);
   }
 
   recipeDetailLabel = new QLabel("Select a recipe to view details", this);
   layout->addWidget(recipeDetailLabel);
+
+	connect(recipeListWidget, &QListWidget::itemClicked, this, &ViewRecipeWindow::displayRecipeInfo);
 }
 
-void ViewRecipeWindow::addRecipeTitle(const QString &recipeTitle) {
-  recipeListWidget->addItem(recipeTitle);
+void ViewRecipeWindow::addRecipeTitle(const Recipe &recipe) {
+	QListWidgetItem *item = new QListWidgetItem(recipe.title, recipeListWidget);
+	item->setData(Qt::UserRole, QVariant::fromValue(recipe));
+}
+
+void ViewRecipeWindow::displayRecipeInfo(QListWidgetItem *item){
+	QVariant var = item->data(Qt::UserRole);
+	if(var.canConvert<Recipe>()){
+		Recipe recipe = var.value<Recipe>();
+		RecipeDetailPopup *popup = new RecipeDetailPopup(recipe, this);
+		popup->setAttribute(Qt::WA_DeleteOnClose);
+		popup->show();
+	}
 }

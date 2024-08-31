@@ -39,7 +39,7 @@ bool SQLiteHelper::executeParameterizedQuery(const std::string &query,
 
   // Bind the parameter to the statement (index 1 since SQLite uses 1-based
   // indexing)
-  if (sqlite3_bind_text(stmt, 1, param.c_str(), -1, SQLITE_STATIC) !=
+  if (sqlite3_bind_text(stmt, 1, param.c_str(), -1, SQLITE_TRANSIENT) !=
       SQLITE_OK) {
     std::cerr << "Failed to bind parameter: " << sqlite3_errmsg(db_)
               << std::endl;
@@ -131,4 +131,101 @@ std::vector<Unit> SQLiteHelper::fetchUnits() {
 
   sqlite3_finalize(stmt);
   return units;
+}
+
+int SQLiteHelper::insertIngredient(Ingredient &ingredient) {
+    // Local variables
+    std::string query = "SELECT id FROM ingredients WHERE name = ?";
+    sqlite3_stmt *stmt = nullptr; // Initialize to nullptr
+
+    if (sqlite3_prepare_v2(db_, query.c_str(), -1, &stmt, nullptr) == SQLITE_OK) {
+        sqlite3_bind_text(stmt, 1, ingredient.name.toStdString().c_str(), -1, SQLITE_TRANSIENT);
+        // Ensure stmt is finalized immediately after use
+        if (sqlite3_step(stmt) == SQLITE_ROW) {
+            ingredient.id = sqlite3_column_int(stmt, 0);
+            sqlite3_finalize(stmt);
+            return ingredient.id;
+        }
+        sqlite3_finalize(stmt); // Finalize stmt in every exit path
+    }
+    // Prepare and execute the insert if the ingredient doesn't exist
+    query = "INSERT INTO ingredients (name) VALUES (?)";
+    if (sqlite3_prepare_v2(db_, query.c_str(), -1, &stmt, nullptr) == SQLITE_OK) {
+        sqlite3_bind_text(stmt, 1, ingredient.name.toStdString().c_str(), -1, SQLITE_TRANSIENT);
+        if (sqlite3_step(stmt) == SQLITE_DONE) {
+            ingredient.id = sqlite3_last_insert_rowid(db_);
+        }
+        sqlite3_finalize(stmt); // Finalize stmt
+    }
+    return ingredient.id;
+}
+
+
+int SQLiteHelper::insertUnit(Unit &unit) {
+  // Check if unit exists
+  std::string query = "SELECT id FROM units WHERE name = ?";
+  sqlite3_stmt *stmt = nullptr;
+  if (sqlite3_prepare_v2(db_, query.c_str(), -1, &stmt, nullptr) == SQLITE_OK) {
+    sqlite3_bind_text(stmt, 1, unit.name.toStdString().c_str(), -1,
+                      SQLITE_TRANSIENT);
+    if (sqlite3_step(stmt) == SQLITE_ROW) {
+      unit.id = sqlite3_column_int(stmt, 0); // Fetch existing ID
+      sqlite3_finalize(stmt);
+      return unit.id;
+    }
+  }
+  sqlite3_finalize(stmt);
+
+  // Insert new unit
+  query = "INSERT INTO units (name) VALUES (?)";
+  if (sqlite3_prepare_v2(db_, query.c_str(), -1, &stmt, nullptr) == SQLITE_OK) {
+    sqlite3_bind_text(stmt, 1, unit.name.toStdString().c_str(), -1,
+                      SQLITE_TRANSIENT);
+    if (sqlite3_step(stmt) == SQLITE_DONE) {
+      unit.id = sqlite3_last_insert_rowid(db_); // Fetch new ID
+    }
+  }
+  sqlite3_finalize(stmt);
+  return unit.id;
+}
+
+int SQLiteHelper::insertRecipe(Recipe &recipe) {
+  std::string query =
+      "INSERT INTO recipes (title, description, instructions) VALUES (?, ?, ?)";
+  sqlite3_stmt *stmt = nullptr;
+  int recipeId = -1;
+  if (sqlite3_prepare_v2(db_, query.c_str(), -1, &stmt, nullptr) == SQLITE_OK) {
+    sqlite3_bind_text(stmt, 1, recipe.title.toStdString().c_str(), -1,
+                      SQLITE_TRANSIENT);
+    sqlite3_bind_text(stmt, 2, recipe.description.toStdString().c_str(), -1,
+                      SQLITE_TRANSIENT);
+    sqlite3_bind_text(stmt, 3, recipe.instructions.toStdString().c_str(), -1,
+                      SQLITE_TRANSIENT);
+    if (sqlite3_step(stmt) == SQLITE_DONE) {
+      recipeId = sqlite3_last_insert_rowid(db_);
+    }
+  }
+
+  sqlite3_finalize(stmt);
+  return recipeId;
+}
+
+bool SQLiteHelper::insertRecipeIngredientMap(int recipeId,
+                                             Ingredient &ingredient,
+                                             float quantity, Unit &unit) {
+  std::string query = "INSERT INTO recipe_ingredients (recipe_id, "
+                      "ingredient_id, quantity, unit_id) VALUES (?, ?, ?, ?)";
+  sqlite3_stmt *stmt = nullptr;
+  bool success = false;
+  if (sqlite3_prepare_v2(db_, query.c_str(), -1, &stmt, nullptr) == SQLITE_OK) {
+    sqlite3_bind_int(stmt, 1, recipeId);
+    sqlite3_bind_int(stmt, 2, ingredient.id);
+    sqlite3_bind_double(stmt, 3, static_cast<double>(quantity));
+    sqlite3_bind_int(stmt, 4, unit.id);
+    if (sqlite3_step(stmt) == SQLITE_DONE) {
+      success = true;
+    }
+  }
+  sqlite3_finalize(stmt);
+  return success;
 }

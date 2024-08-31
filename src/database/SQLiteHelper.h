@@ -17,6 +17,11 @@ public:
   std::vector<Recipe> fetchRecipes();
   std::vector<Ingredient> fetchIngredients();
   std::vector<Unit> fetchUnits();
+  int insertIngredient(Ingredient &ingredient);
+  int insertUnit(Unit &unit);
+  int insertRecipe(Recipe &recipe);
+  bool insertRecipeIngredientMap(int recipeId, Ingredient &ingredient,
+                                 float quantity, Unit &unit);
 
 private:
   sqlite3 *db_;

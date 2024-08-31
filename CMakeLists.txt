@@ -20,6 +20,7 @@ include_directories(
     ${CMAKE_SOURCE_DIR}/src/mainwindow
     ${CMAKE_SOURCE_DIR}/src/viewrecipewindow
 		${CMAKE_SOURCE_DIR}/src/database
+		#	${CMAKE_SOURCE_DIR}/src/database/modelStructs
 )
 
 add_executable(recipe_cli
