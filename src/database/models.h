@@ -10,4 +10,29 @@ struct Recipe {
   QString instructions;
 };
 
+struct Ingredient {
+  int id;
+  QString name;
+};
+
+struct Unit {
+  int id;
+  QString name;
+};
+
+struct UnitConversions {
+  int id;
+  int from_id;
+  int to_id;
+  float factor;
+};
+
+struct RecipeIngredients {
+  int id;
+  int recipe_id;
+  int ingredient_id;
+  float quantity;
+  int unit_id;
+};
+
 #endif

@@ -2,7 +2,8 @@
 
 SQLiteHelper::SQLiteHelper(const std::string &db_path) {
   if (sqlite3_open(db_path.c_str(), &db_) != SQLITE_OK) {
-    std::cerr << "Error opening database: " << db_path << " Error: "<< sqlite3_errmsg(db_) << std::endl;
+    std::cerr << "Error opening database: " << db_path
+              << " Error: " << sqlite3_errmsg(db_) << std::endl;
     db_ = nullptr;
   }
 }
@@ -87,4 +88,48 @@ std::vector<Recipe> SQLiteHelper::fetchRecipes() {
   // Finalize the statement to release resources
   sqlite3_finalize(stmt);
   return recipes;
+}
+
+std::vector<Ingredient> SQLiteHelper::fetchIngredients() {
+  std::vector<Ingredient> ingredients;
+  sqlite3_stmt *stmt;
+  std::string query = "SELECT id, name FROM ingredients;";
+
+  if (sqlite3_prepare_v2(db_, query.c_str(), -1, &stmt, nullptr) == SQLITE_OK) {
+    while (sqlite3_step(stmt) == SQLITE_ROW) {
+      Ingredient ingredient;
+      ingredient.id = sqlite3_column_int(stmt, 0);
+      ingredient.name = QString::fromUtf8(
+          reinterpret_cast<const char *>(sqlite3_column_text(stmt, 1)));
+			ingredients.push_back(ingredient);
+    }
+  } else {
+    std::cerr << "Failed to fetch ingredients: " << sqlite3_errmsg(db_)
+              << std::endl;
+  }
+
+	sqlite3_finalize(stmt);
+	return ingredients;
+}
+
+std::vector<Unit> SQLiteHelper::fetchUnits() {
+  std::vector<Unit> units;
+  sqlite3_stmt *stmt;
+  std::string query = "SELECT id, name FROM units;";
+
+  if (sqlite3_prepare_v2(db_, query.c_str(), -1, &stmt, nullptr) == SQLITE_OK) {
+    while (sqlite3_step(stmt) == SQLITE_ROW) {
+      Unit unit;
+      unit.id = sqlite3_column_int(stmt, 0);
+      unit.name = QString::fromUtf8(
+          reinterpret_cast<const char *>(sqlite3_column_text(stmt, 1)));
+			units.push_back(unit);
+    }
+  } else {
+    std::cerr << "Failed to fetch units: " << sqlite3_errmsg(db_)
+              << std::endl;
+  }
+
+	sqlite3_finalize(stmt);
+	return units;
 }

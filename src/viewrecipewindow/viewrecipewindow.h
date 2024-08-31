@@ -1,13 +1,13 @@
 #ifndef VIEWRECIPEWINDOW_H
 #define VIEWRECIPEWINDOW_H
 
+#include <QLabel>
 #include <QLineEdit>
+#include <QListWidget>
 #include <QMainWindow>
 #include <QPushButton>
 #include <QTextEdit>
 #include <QWidget>
-#include <QListWidget>
-#include <QLabel>
 
 class ViewRecipeWindow : public QWidget {
   Q_OBJECT
@@ -21,7 +21,7 @@ private:
   QLabel *recipeDetailLabel;
 
   void setupUI();
-	void addRecipeTitle(const QString& recipeTitle);
+  void addRecipeTitle(const QString &recipeTitle);
 };
 
 #endif

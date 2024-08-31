@@ -14,10 +14,10 @@ public:
 
 private:
   AddRecipeWindow *addRecipeWindow = nullptr;
-	ViewRecipeWindow *viewRecipeWindow = nullptr;
+  ViewRecipeWindow *viewRecipeWindow = nullptr;
   void setupUI(); // Function to set up the UI elements
   void openAddRecipeWindow();
-	void openViewRecipeWindow();
+  void openViewRecipeWindow();
 };
 
 #endif // MAINWINDOW_H

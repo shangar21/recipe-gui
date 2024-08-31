@@ -15,6 +15,8 @@ public:
   bool executeParameterizedQuery(const std::string &query,
                                  const std::string &param);
   std::vector<Recipe> fetchRecipes();
+	std::vector<Ingredient> fetchIngredients();
+	std::vector<Unit> fetchUnits();
 
 private:
   sqlite3 *db_;

@@ -26,7 +26,8 @@ void MainWindow::setupUI() {
   connect(addRecipeButton, &QPushButton::clicked, this,
           &MainWindow::openAddRecipeWindow);
 
-	connect(viewRecipeButton, &QPushButton::clicked, this, &MainWindow::openViewRecipeWindow);
+  connect(viewRecipeButton, &QPushButton::clicked, this,
+          &MainWindow::openViewRecipeWindow);
 }
 
 void MainWindow::openAddRecipeWindow() {
@@ -42,12 +43,13 @@ void MainWindow::openAddRecipeWindow() {
 }
 
 void MainWindow::openViewRecipeWindow() {
-	if (!viewRecipeWindow){
-		viewRecipeWindow = new ViewRecipeWindow(this);
-		viewRecipeWindow->setAttribute(Qt::WA_DeleteOnClose);
-		connect(viewRecipeWindow, &QWidget::destroyed, this, [this]() { viewRecipeWindow = nullptr; });
-	}
-	viewRecipeWindow->show();
-	viewRecipeWindow->raise();
-	viewRecipeWindow->activateWindow();
+  if (!viewRecipeWindow) {
+    viewRecipeWindow = new ViewRecipeWindow(this);
+    viewRecipeWindow->setAttribute(Qt::WA_DeleteOnClose);
+    connect(viewRecipeWindow, &QWidget::destroyed, this,
+            [this]() { viewRecipeWindow = nullptr; });
+  }
+  viewRecipeWindow->show();
+  viewRecipeWindow->raise();
+  viewRecipeWindow->activateWindow();
 }
