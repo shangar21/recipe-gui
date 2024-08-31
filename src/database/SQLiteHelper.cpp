@@ -101,15 +101,15 @@ std::vector<Ingredient> SQLiteHelper::fetchIngredients() {
       ingredient.id = sqlite3_column_int(stmt, 0);
       ingredient.name = QString::fromUtf8(
           reinterpret_cast<const char *>(sqlite3_column_text(stmt, 1)));
-			ingredients.push_back(ingredient);
+      ingredients.push_back(ingredient);
     }
   } else {
     std::cerr << "Failed to fetch ingredients: " << sqlite3_errmsg(db_)
               << std::endl;
   }
 
-	sqlite3_finalize(stmt);
-	return ingredients;
+  sqlite3_finalize(stmt);
+  return ingredients;
 }
 
 std::vector<Unit> SQLiteHelper::fetchUnits() {
@@ -123,13 +123,12 @@ std::vector<Unit> SQLiteHelper::fetchUnits() {
       unit.id = sqlite3_column_int(stmt, 0);
       unit.name = QString::fromUtf8(
           reinterpret_cast<const char *>(sqlite3_column_text(stmt, 1)));
-			units.push_back(unit);
+      units.push_back(unit);
     }
   } else {
-    std::cerr << "Failed to fetch units: " << sqlite3_errmsg(db_)
-              << std::endl;
+    std::cerr << "Failed to fetch units: " << sqlite3_errmsg(db_) << std::endl;
   }
 
-	sqlite3_finalize(stmt);
-	return units;
+  sqlite3_finalize(stmt);
+  return units;
 }
