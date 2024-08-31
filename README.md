@@ -1,6 +1,6 @@
-# Recipe-CLI
+# Recipe-GUI
 
-Recipe-CLI is a Qt-based desktop application that allows users to create, manage, and view recipes. It also provides functionality to generate a grocery list by aggregating ingredients from selected recipes, making meal planning and shopping easier and more organized.
+Recipe-GUI is a Qt-based desktop application that allows users to create, manage, and view recipes. It also provides functionality to generate a grocery list by aggregating ingredients from selected recipes, making meal planning and shopping easier and more organized.
 
 ## Features
 
@@ -70,10 +70,16 @@ Recipe-CLI is a Qt-based desktop application that allows users to create, manage
 ### Main Menu
 ![image](https://github.com/user-attachments/assets/5208c95d-c912-4935-ac77-347d567f1385)
 
-## View Recipe Titles (click to see more details)
-![image](https://github.com/user-attachments/assets/0f94f459-a828-4953-871b-66d4a9a2c44a)
+### View Recipe Titles (click to see more details)
+![image](https://github.com/user-attachments/assets/c7199540-c8ca-41d4-a3f4-4ef78837a0c1)
+![image](https://github.com/user-attachments/assets/d4c63b31-7fca-45af-9b03-8ca060d17f6c)
 
 
+### Add Ingredient Screen
+![image](https://github.com/user-attachments/assets/fa25204c-679e-4fa0-a3c2-1115f04334b3)
+![image](https://github.com/user-attachments/assets/5d184c29-9244-40ee-80ff-90e97c5b9b96)
+
+### 
 
 ## Future Enhancements
 
