@@ -6,5 +6,3 @@ struct Unit {
   int id;
   QString name;
 };
-
-

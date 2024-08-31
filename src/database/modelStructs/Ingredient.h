@@ -6,5 +6,3 @@ struct Ingredient {
   int id;
   QString name;
 };
-
-

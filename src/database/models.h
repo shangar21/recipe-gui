@@ -1,8 +1,8 @@
 #ifndef MODELS_H
 #define MODELS_H
 
-#include <QString>
 #include <QMetaType>
+#include <QString>
 
 struct Recipe {
   int id;

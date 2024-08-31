@@ -9,5 +9,3 @@ struct Recipe {
   QString instructions;
 };
 Q_DECLARE_METATYPE(Recipe)
-
-

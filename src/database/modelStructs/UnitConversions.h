@@ -8,5 +8,3 @@ struct UnitConversions {
   int to_id;
   float factor;
 };
-
-

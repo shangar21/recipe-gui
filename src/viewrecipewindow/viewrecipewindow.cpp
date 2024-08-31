@@ -26,20 +26,21 @@ void ViewRecipeWindow::setupUI() {
   recipeDetailLabel = new QLabel("Select a recipe to view details", this);
   layout->addWidget(recipeDetailLabel);
 
-	connect(recipeListWidget, &QListWidget::itemClicked, this, &ViewRecipeWindow::displayRecipeInfo);
+  connect(recipeListWidget, &QListWidget::itemClicked, this,
+          &ViewRecipeWindow::displayRecipeInfo);
 }
 
 void ViewRecipeWindow::addRecipeTitle(const Recipe &recipe) {
-	QListWidgetItem *item = new QListWidgetItem(recipe.title, recipeListWidget);
-	item->setData(Qt::UserRole, QVariant::fromValue(recipe));
+  QListWidgetItem *item = new QListWidgetItem(recipe.title, recipeListWidget);
+  item->setData(Qt::UserRole, QVariant::fromValue(recipe));
 }
 
-void ViewRecipeWindow::displayRecipeInfo(QListWidgetItem *item){
-	QVariant var = item->data(Qt::UserRole);
-	if(var.canConvert<Recipe>()){
-		Recipe recipe = var.value<Recipe>();
-		RecipeDetailPopup *popup = new RecipeDetailPopup(recipe, this);
-		popup->setAttribute(Qt::WA_DeleteOnClose);
-		popup->show();
-	}
+void ViewRecipeWindow::displayRecipeInfo(QListWidgetItem *item) {
+  QVariant var = item->data(Qt::UserRole);
+  if (var.canConvert<Recipe>()) {
+    Recipe recipe = var.value<Recipe>();
+    RecipeDetailPopup *popup = new RecipeDetailPopup(recipe, this);
+    popup->setAttribute(Qt::WA_DeleteOnClose);
+    popup->show();
+  }
 }

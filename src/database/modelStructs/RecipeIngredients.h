@@ -9,5 +9,3 @@ struct RecipeIngredients {
   float quantity;
   int unit_id;
 };
-
-

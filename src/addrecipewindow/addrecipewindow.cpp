@@ -2,10 +2,10 @@
 #include "SQLiteHelper.h"
 #include <QFormLayout>
 #include <QLabel>
+#include <QMessageBox>
 #include <QPushButton>
 #include <QVBoxLayout>
 #include <QWidget>
-#include <QMessageBox>
 
 AddRecipeWindow::AddRecipeWindow(QWidget *parent) : QWidget(nullptr) {
   setupUI();
@@ -104,14 +104,14 @@ void AddRecipeWindow::addIngredient() {
     ingredientsListWidget->addItem(ingredientEntry);
 
     Ingredient i;
-		i.id = -1;
+    i.id = -1;
     i.name = ingredient;
 
     bool ok;
     float q = quantity.toFloat(&ok);
 
     Unit u;
-		u.id = -1;
+    u.id = -1;
     u.name = unit;
 
     ingredientsList.push_back(std::tuple<Ingredient, float, Unit>(i, q, u));
@@ -148,17 +148,18 @@ void AddRecipeWindow::saveRecipe() {
 
   int recipeId = SQLiteHelper().insertRecipe(recipe);
 
-	recipe.id = recipeId;
+  recipe.id = recipeId;
 
-  if (recipe.id <= 0){
+  if (recipe.id <= 0) {
     return;
-	}
-
-  for (auto &[ingredient, quantity, unit] : ingredientsList) {
-    SQLiteHelper().insertRecipeIngredientMap(recipe.id, ingredient, quantity, unit);
   }
 
-	QMessageBox::information(this, "Success", "Recipe saved successfully!");
+  for (auto &[ingredient, quantity, unit] : ingredientsList) {
+    SQLiteHelper().insertRecipeIngredientMap(recipe.id, ingredient, quantity,
+                                             unit);
+  }
 
-	this->close();
+  QMessageBox::information(this, "Success", "Recipe saved successfully!");
+
+  this->close();
 }

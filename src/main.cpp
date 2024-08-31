@@ -4,7 +4,7 @@
 int main(int argc, char *argv[]) {
   QApplication app(argc, argv);
 
-	qRegisterMetaType<Recipe>("Recipe");
+  qRegisterMetaType<Recipe>("Recipe");
 
   MainWindow window;
   window.setWindowTitle("Recipe CLI - Main Window");

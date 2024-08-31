@@ -134,32 +134,33 @@ std::vector<Unit> SQLiteHelper::fetchUnits() {
 }
 
 int SQLiteHelper::insertIngredient(Ingredient &ingredient) {
-    // Local variables
-    std::string query = "SELECT id FROM ingredients WHERE name = ?";
-    sqlite3_stmt *stmt = nullptr; // Initialize to nullptr
+  // Local variables
+  std::string query = "SELECT id FROM ingredients WHERE name = ?";
+  sqlite3_stmt *stmt = nullptr; // Initialize to nullptr
 
-    if (sqlite3_prepare_v2(db_, query.c_str(), -1, &stmt, nullptr) == SQLITE_OK) {
-        sqlite3_bind_text(stmt, 1, ingredient.name.toStdString().c_str(), -1, SQLITE_TRANSIENT);
-        // Ensure stmt is finalized immediately after use
-        if (sqlite3_step(stmt) == SQLITE_ROW) {
-            ingredient.id = sqlite3_column_int(stmt, 0);
-            sqlite3_finalize(stmt);
-            return ingredient.id;
-        }
-        sqlite3_finalize(stmt); // Finalize stmt in every exit path
+  if (sqlite3_prepare_v2(db_, query.c_str(), -1, &stmt, nullptr) == SQLITE_OK) {
+    sqlite3_bind_text(stmt, 1, ingredient.name.toStdString().c_str(), -1,
+                      SQLITE_TRANSIENT);
+    // Ensure stmt is finalized immediately after use
+    if (sqlite3_step(stmt) == SQLITE_ROW) {
+      ingredient.id = sqlite3_column_int(stmt, 0);
+      sqlite3_finalize(stmt);
+      return ingredient.id;
     }
-    // Prepare and execute the insert if the ingredient doesn't exist
-    query = "INSERT INTO ingredients (name) VALUES (?)";
-    if (sqlite3_prepare_v2(db_, query.c_str(), -1, &stmt, nullptr) == SQLITE_OK) {
-        sqlite3_bind_text(stmt, 1, ingredient.name.toStdString().c_str(), -1, SQLITE_TRANSIENT);
-        if (sqlite3_step(stmt) == SQLITE_DONE) {
-            ingredient.id = sqlite3_last_insert_rowid(db_);
-        }
-        sqlite3_finalize(stmt); // Finalize stmt
+    sqlite3_finalize(stmt); // Finalize stmt in every exit path
+  }
+  // Prepare and execute the insert if the ingredient doesn't exist
+  query = "INSERT INTO ingredients (name) VALUES (?)";
+  if (sqlite3_prepare_v2(db_, query.c_str(), -1, &stmt, nullptr) == SQLITE_OK) {
+    sqlite3_bind_text(stmt, 1, ingredient.name.toStdString().c_str(), -1,
+                      SQLITE_TRANSIENT);
+    if (sqlite3_step(stmt) == SQLITE_DONE) {
+      ingredient.id = sqlite3_last_insert_rowid(db_);
     }
-    return ingredient.id;
+    sqlite3_finalize(stmt); // Finalize stmt
+  }
+  return ingredient.id;
 }
-
 
 int SQLiteHelper::insertUnit(Unit &unit) {
   // Check if unit exists
