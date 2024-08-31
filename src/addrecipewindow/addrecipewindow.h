@@ -1,27 +1,26 @@
 #ifndef ADDRECIPEWINDOW_H
 #define ADDRECIPEWINDOW_H
 
-#include <QMainWindow>
-#include <QWidget>
 #include <QLineEdit>
-#include <QTextEdit>
+#include <QMainWindow>
 #include <QPushButton>
+#include <QTextEdit>
+#include <QWidget>
 
 class AddRecipeWindow : public QWidget {
-	Q_OBJECT
+  Q_OBJECT
 
-	public:
-		AddRecipeWindow(QWidget *parent = nullptr);
-		~AddRecipeWindow();
-	
-	private:
-		QLineEdit *recipeNameLineEdit;
-		QLineEdit *recipeDescLineEdit;
-		QTextEdit *instructionsTextEdit;
-		QPushButton *saveButton;
+public:
+  AddRecipeWindow(QWidget *parent = nullptr);
+  ~AddRecipeWindow();
 
-		void setupUI();
+private:
+  QLineEdit *recipeNameLineEdit;
+  QLineEdit *recipeDescLineEdit;
+  QTextEdit *instructionsTextEdit;
+  QPushButton *saveButton;
 
+  void setupUI();
 };
 
 #endif
