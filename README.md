@@ -64,6 +64,16 @@ Recipe-CLI is a Qt-based desktop application that allows users to create, manage
    - Select multiple recipes to include in your grocery list.
    - The application will aggregate all ingredients and quantities needed from the selected recipes.
    - View or print the generated grocery list for easy shopping.
+  
+## Samples
+
+### Main Menu
+![image](https://github.com/user-attachments/assets/5208c95d-c912-4935-ac77-347d567f1385)
+
+## View Recipe Titles (click to see more details)
+![image](https://github.com/user-attachments/assets/0f94f459-a828-4953-871b-66d4a9a2c44a)
+
+
 
 ## Future Enhancements
 
