@@ -21,10 +21,11 @@ void GenerateGroceryListWindow::setupUI() {
   recipeScrollArea->setWidgetResizable(true);
 
   generateListButton = new QPushButton("Generate List", this);
-	connect(generateListButton, &QPushButton::clicked, this, &GenerateGroceryListWindow::generateGroceryList);
+  connect(generateListButton, &QPushButton::clicked, this,
+          &GenerateGroceryListWindow::generateGroceryList);
 
   mainLayout->addWidget(recipeScrollArea);
-	mainLayout->addWidget(generateListButton);
+  mainLayout->addWidget(generateListButton);
 
   loadRecipes();
 }
@@ -60,17 +61,18 @@ void GenerateGroceryListWindow::generateGroceryList() {
       std::vector<std::tuple<Ingredient, float, Unit>> recipeIngredients =
           SQLiteHelper().fetchRecipeIngredients(recipeId);
 
-			for (auto &[ingredient, measure, unit] : recipeIngredients){
-				QString key = QString("%1 (%2)").arg(ingredient.name).arg(unit.name);
-				aggregatedIngredients[key] += measure * quantity;
-			}
+      for (auto &[ingredient, measure, unit] : recipeIngredients) {
+        QString key = QString("%1 (%2)").arg(ingredient.name).arg(unit.name);
+        aggregatedIngredients[key] += measure * quantity;
+      }
     }
   }
 
-	QStringList output;
-	for (auto it = aggregatedIngredients.begin(); it != aggregatedIngredients.end(); it++){
-		output.append(QString("%1: %2").arg(it.key()).arg(it.value()));
-	}
+  QStringList output;
+  for (auto it = aggregatedIngredients.begin();
+       it != aggregatedIngredients.end(); it++) {
+    output.append(QString("%1: %2").arg(it.key()).arg(it.value()));
+  }
 
-	QMessageBox::information(this, "Grocery List", output.join("\n"));
+  QMessageBox::information(this, "Grocery List", output.join("\n"));
 }

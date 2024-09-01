@@ -1,11 +1,11 @@
 #pragma once
 #include "models.h"
+#include <QDebug>
 #include <QString>
 #include <iostream>
 #include <sqlite3.h>
 #include <string>
 #include <vector>
-#include <QDebug>
 
 class SQLiteHelper {
 public:
@@ -25,7 +25,6 @@ public:
                                  float quantity, Unit &unit);
   std::vector<std::tuple<Ingredient, float, Unit>>
   fetchRecipeIngredients(int recipeId);
-	
 
 private:
   sqlite3 *db_;

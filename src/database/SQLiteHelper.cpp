@@ -231,10 +231,11 @@ bool SQLiteHelper::insertRecipeIngredientMap(int recipeId,
   return success;
 }
 
-std::vector<std::tuple<Ingredient, float, Unit>> SQLiteHelper::fetchRecipeIngredients(int recipeId) {
-    std::vector<std::tuple<Ingredient, float, Unit>> ingredientList;
+std::vector<std::tuple<Ingredient, float, Unit>>
+SQLiteHelper::fetchRecipeIngredients(int recipeId) {
+  std::vector<std::tuple<Ingredient, float, Unit>> ingredientList;
 
-    std::string query = R"(
+  std::string query = R"(
         WITH IngredientData AS (
             SELECT 
                 ri.ingredient_id,
@@ -292,29 +293,31 @@ std::vector<std::tuple<Ingredient, float, Unit>> SQLiteHelper::fetchRecipeIngred
             AggregatedData;
     )";
 
-    sqlite3_stmt *stmt;
-    if (sqlite3_prepare_v2(db_, query.c_str(), -1, &stmt, nullptr) != SQLITE_OK) {
-        qDebug() << "Failed to prepare statement:" << sqlite3_errmsg(db_);
-        return ingredientList;
-    }
-    
-    sqlite3_bind_int(stmt, 1, recipeId);
-
-    while (sqlite3_step(stmt) == SQLITE_ROW) {
-        Ingredient ingredient;
-        ingredient.id = sqlite3_column_int(stmt, 0);
-        ingredient.name = QString::fromUtf8(reinterpret_cast<const char *>(sqlite3_column_text(stmt, 1)));
-
-        float quantity = static_cast<float>(sqlite3_column_double(stmt, 2));
-
-        Unit unit;
-        unit.id = sqlite3_column_int(stmt, 3);
-        unit.name = QString::fromUtf8(reinterpret_cast<const char *>(sqlite3_column_text(stmt, 4)));
-
-        ingredientList.emplace_back(ingredient, quantity, unit);
-    }
-
-    sqlite3_finalize(stmt);
-
+  sqlite3_stmt *stmt;
+  if (sqlite3_prepare_v2(db_, query.c_str(), -1, &stmt, nullptr) != SQLITE_OK) {
+    qDebug() << "Failed to prepare statement:" << sqlite3_errmsg(db_);
     return ingredientList;
+  }
+
+  sqlite3_bind_int(stmt, 1, recipeId);
+
+  while (sqlite3_step(stmt) == SQLITE_ROW) {
+    Ingredient ingredient;
+    ingredient.id = sqlite3_column_int(stmt, 0);
+    ingredient.name = QString::fromUtf8(
+        reinterpret_cast<const char *>(sqlite3_column_text(stmt, 1)));
+
+    float quantity = static_cast<float>(sqlite3_column_double(stmt, 2));
+
+    Unit unit;
+    unit.id = sqlite3_column_int(stmt, 3);
+    unit.name = QString::fromUtf8(
+        reinterpret_cast<const char *>(sqlite3_column_text(stmt, 4)));
+
+    ingredientList.emplace_back(ingredient, quantity, unit);
+  }
+
+  sqlite3_finalize(stmt);
+
+  return ingredientList;
 }
