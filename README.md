@@ -79,7 +79,10 @@ Recipe-GUI is a Qt-based desktop application that allows users to create, manage
 ![image](https://github.com/user-attachments/assets/fa25204c-679e-4fa0-a3c2-1115f04334b3)
 ![image](https://github.com/user-attachments/assets/5d184c29-9244-40ee-80ff-90e97c5b9b96)
 
-### 
+### Generate Grocery List
+![image](https://github.com/user-attachments/assets/82cbf37b-a861-4f9f-a366-3b9a4f4a6e84)
+![image](https://github.com/user-attachments/assets/a65992ab-3094-4db5-8c65-d34e3c3e70be)
+
 
 ## Future Enhancements
 
