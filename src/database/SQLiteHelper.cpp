@@ -230,3 +230,91 @@ bool SQLiteHelper::insertRecipeIngredientMap(int recipeId,
   sqlite3_finalize(stmt);
   return success;
 }
+
+std::vector<std::tuple<Ingredient, float, Unit>> SQLiteHelper::fetchRecipeIngredients(int recipeId) {
+    std::vector<std::tuple<Ingredient, float, Unit>> ingredientList;
+
+    std::string query = R"(
+        WITH IngredientData AS (
+            SELECT 
+                ri.ingredient_id,
+                i.name AS ingredient_name,
+                ri.quantity,
+                ri.unit_id,
+                u.name AS unit_name
+            FROM 
+                recipe_ingredients ri
+            JOIN 
+                ingredients i ON ri.ingredient_id = i.id
+            JOIN 
+                units u ON ri.unit_id = u.id
+            WHERE 
+                ri.recipe_id = ?
+        ),
+        AggregatedData AS (
+            SELECT 
+                id.ingredient_id,
+                id.ingredient_name,
+                SUM(CASE 
+                        WHEN uc.from_unit_id = id.unit_id THEN id.quantity * uc.factor
+                        WHEN uc.to_unit_id = id.unit_id THEN id.quantity / uc.factor
+                        ELSE id.quantity
+                    END) AS aggregated_quantity,
+                CASE 
+                    WHEN uc.from_unit_id = id.unit_id THEN uc.to_unit_id
+                    WHEN uc.to_unit_id = id.unit_id THEN uc.from_unit_id
+                    ELSE id.unit_id
+                END AS resulting_unit_id,
+                COALESCE(
+                    (SELECT u2.name FROM units u2 WHERE u2.id = 
+                        CASE 
+                            WHEN uc.from_unit_id = id.unit_id THEN uc.to_unit_id
+                            WHEN uc.to_unit_id = id.unit_id THEN uc.from_unit_id
+                            ELSE id.unit_id
+                        END), 
+                    id.unit_name
+                ) AS resulting_unit_name
+            FROM 
+                IngredientData id
+            LEFT JOIN 
+                unit_conversions uc ON (id.unit_id = uc.from_unit_id OR id.unit_id = uc.to_unit_id)
+            GROUP BY 
+                id.ingredient_id, id.ingredient_name, resulting_unit_id, resulting_unit_name
+        )
+
+        SELECT 
+            ingredient_id,
+            ingredient_name,
+            aggregated_quantity,
+            resulting_unit_id,
+            resulting_unit_name
+        FROM 
+            AggregatedData;
+    )";
+
+    sqlite3_stmt *stmt;
+    if (sqlite3_prepare_v2(db_, query.c_str(), -1, &stmt, nullptr) != SQLITE_OK) {
+        qDebug() << "Failed to prepare statement:" << sqlite3_errmsg(db_);
+        return ingredientList;
+    }
+    
+    sqlite3_bind_int(stmt, 1, recipeId);
+
+    while (sqlite3_step(stmt) == SQLITE_ROW) {
+        Ingredient ingredient;
+        ingredient.id = sqlite3_column_int(stmt, 0);
+        ingredient.name = QString::fromUtf8(reinterpret_cast<const char *>(sqlite3_column_text(stmt, 1)));
+
+        float quantity = static_cast<float>(sqlite3_column_double(stmt, 2));
+
+        Unit unit;
+        unit.id = sqlite3_column_int(stmt, 3);
+        unit.name = QString::fromUtf8(reinterpret_cast<const char *>(sqlite3_column_text(stmt, 4)));
+
+        ingredientList.emplace_back(ingredient, quantity, unit);
+    }
+
+    sqlite3_finalize(stmt);
+
+    return ingredientList;
+}

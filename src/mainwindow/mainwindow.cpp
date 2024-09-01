@@ -28,6 +28,9 @@ void MainWindow::setupUI() {
 
   connect(viewRecipeButton, &QPushButton::clicked, this,
           &MainWindow::openViewRecipeWindow);
+
+  connect(generateGroceryListButton, &QPushButton::clicked, this,
+          &MainWindow::openGenerateGroceryListWindow);
 }
 
 void MainWindow::openAddRecipeWindow() {
@@ -52,4 +55,16 @@ void MainWindow::openViewRecipeWindow() {
   viewRecipeWindow->show();
   viewRecipeWindow->raise();
   viewRecipeWindow->activateWindow();
+}
+
+void MainWindow::openGenerateGroceryListWindow() {
+  if (!generateGroceryListWindow) {
+    generateGroceryListWindow = new GenerateGroceryListWindow(this);
+    generateGroceryListWindow->setAttribute(Qt::WA_DeleteOnClose);
+    connect(generateGroceryListWindow, &QWidget::destroyed, this,
+            [this]() { generateGroceryListWindow = nullptr; });
+  }
+  generateGroceryListWindow->show();
+  generateGroceryListWindow->raise();
+  generateGroceryListWindow->activateWindow();
 }

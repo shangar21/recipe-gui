@@ -5,6 +5,7 @@
 #include <sqlite3.h>
 #include <string>
 #include <vector>
+#include <QDebug>
 
 class SQLiteHelper {
 public:
@@ -22,6 +23,9 @@ public:
   int insertRecipe(Recipe &recipe);
   bool insertRecipeIngredientMap(int recipeId, Ingredient &ingredient,
                                  float quantity, Unit &unit);
+  std::vector<std::tuple<Ingredient, float, Unit>>
+  fetchRecipeIngredients(int recipeId);
+	
 
 private:
   sqlite3 *db_;

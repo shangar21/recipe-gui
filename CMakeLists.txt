@@ -20,7 +20,6 @@ include_directories(
     ${CMAKE_SOURCE_DIR}/src/mainwindow
     ${CMAKE_SOURCE_DIR}/src/viewrecipewindow
 		${CMAKE_SOURCE_DIR}/src/database
-		#	${CMAKE_SOURCE_DIR}/src/database/modelStructs
 )
 
 add_executable(recipe_cli
@@ -31,6 +30,8 @@ add_executable(recipe_cli
 		src/addrecipewindow/addrecipewindow.h
 		src/viewrecipewindow/viewrecipewindow.cpp
 		src/viewrecipewindow/viewrecipewindow.h
+		src/generatelistwindow/generatelistwindow.cpp
+		src/generatelistwindow/generatelistwindow.h
 		src/database/SQLiteHelper.cpp
 		src/database/SQLiteHelper.h
 )
