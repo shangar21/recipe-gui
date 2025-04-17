@@ -89,6 +89,7 @@ Recipe-GUI is a Qt-based desktop application that allows users to create, manage
 - **Recipe Import/Export**: Add functionality to import recipes from files and export existing recipes for sharing.
 - **Recipe Search**: Implement search and filter features for quickly finding specific recipes.
 - **Nutrition Calculation**: Add nutritional information calculation based on ingredients.
+- **Email Grocery List**: Send the recipe, as well as the associated grocery list to your email with a click. 
 
 ## Contributing
 
