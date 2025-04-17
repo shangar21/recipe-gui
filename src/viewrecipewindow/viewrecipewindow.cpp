@@ -44,3 +44,26 @@ void ViewRecipeWindow::displayRecipeInfo(QListWidgetItem *item) {
     popup->show();
   }
 }
+
+std::string RecipeDetailPopup::getIngredientString(const Recipe &recipe) {
+    std::vector<std::tuple<Ingredient, float, Unit>> ingredientList = 
+        SQLiteHelper().fetchRecipeIngredients(recipe.id);
+
+    std::string data;
+
+    for (const std::tuple<Ingredient, float, Unit>& ingredient : ingredientList) {
+        const Ingredient& ing = std::get<0>(ingredient);
+        float quantity = std::get<1>(ingredient);
+        const Unit& unit = std::get<2>(ingredient);
+
+        data += ing.name.toStdString();
+        data += " ";
+        data += std::to_string(quantity);
+        data += " ";
+        data += unit.name.toStdString();
+        data += "\n";
+    }
+
+    return data;
+}
+

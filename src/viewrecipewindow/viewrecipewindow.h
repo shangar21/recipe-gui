@@ -40,15 +40,22 @@ public:
         new QLabel("Description \n" + recipe.description, this);
     QLabel *instructionsLabel =
         new QLabel("Instructions: \n" + recipe.instructions, this);
+    QLabel *ingredientsLabel = new QLabel(
+        QString::fromStdString("Ingredients: \n" + getIngredientString(recipe)),
+        this);
 
     layout->addWidget(titleLabel);
     layout->addWidget(descriptionLabel);
     layout->addWidget(instructionsLabel);
+    layout->addWidget(ingredientsLabel);
 
     setLayout(layout);
     setWindowTitle("Recipe Details");
     resize(300, 200);
   }
+
+private:
+  std::string getIngredientString(const Recipe &recipe);
 };
 
 #endif
